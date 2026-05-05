@@ -126,6 +126,15 @@ const _inlineRuntimeConfig = {
     "routeRules": {
       "/__nuxt_error": {
         "cache": false
+      },
+      "/": {
+        "prerender": true
+      },
+      "/admin/**": {
+        "ssr": false
+      },
+      "/blog": {
+        "isr": 3600
       }
     }
   },
@@ -777,9 +786,11 @@ const _O3fRMu = lazyEventHandler(() => {
   return useBase(opts.baseURL, ipxHandler);
 });
 
+const _lazy_oQ15MG = () => Promise.resolve().then(function () { return _pokemon_$1; });
 const _lazy_mOOFl1 = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
+  { route: '/api/:pokemon', handler: _lazy_oQ15MG, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_error', handler: _lazy_mOOFl1, lazy: true, middleware: false, method: undefined },
   { route: '/_ipx/**', handler: _O3fRMu, lazy: false, middleware: false, method: undefined },
   { route: '/**', handler: _lazy_mOOFl1, lazy: true, middleware: false, method: undefined }
@@ -909,6 +920,25 @@ const template$1 = _template;
 const errorDev = /*#__PURE__*/Object.freeze({
   __proto__: null,
   template: template$1
+});
+
+const _pokemon_ = defineCachedEventHandler(
+  async (event) => {
+    const { pokemon } = event.context.params;
+    const data = await $fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
+    const idealData = {
+      id: data.id,
+      name: data.name,
+      sprite: data.sprites.front_default
+    };
+    return idealData;
+  },
+  { maxAge: 60 * 5 }
+);
+
+const _pokemon_$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: _pokemon_
 });
 
 const appRootId = "__nuxt";

@@ -6,4 +6,9 @@ export default defineNuxtConfig({
     debug: process.env.NODE_ENV === "development",
     mode: "init",
   },
+  routeRules: {
+    "/": { prerender: true },
+    "/admin/**": { ssr: false },
+    "/blog": { isr: 3600 },
+  },
 });
